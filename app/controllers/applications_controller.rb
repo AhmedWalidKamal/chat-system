@@ -4,6 +4,7 @@ class ApplicationsController < ApplicationController
   # GET /applications or /applications.json
   def index
     @applications = Application.all
+    render json: @applications
   end
 
   # GET /applications/1 or /applications/1.json
@@ -22,16 +23,9 @@ class ApplicationsController < ApplicationController
   # POST /applications or /applications.json
   def create
     @application = Application.new(application_params)
-
-    respond_to do |format|
-      if @application.save
-        format.html { redirect_to application_url(@application), notice: "Application was successfully created." }
-        format.json { render :show, status: :created, location: @application }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @application.errors, status: :unprocessable_entity }
-      end
-    end
+    @application.chats_count = 0
+    @application.save
+    render json: @application
   end
 
   # PATCH/PUT /applications/1 or /applications/1.json
@@ -65,6 +59,6 @@ class ApplicationsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def application_params
-      params.require(:application).permit(:token, :name, :chats_count)
+      params.permit(:name)
     end
 end
