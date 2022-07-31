@@ -10,15 +10,6 @@ class ChatsController < ApplicationController
   def show
   end
 
-  # GET /chats/new
-  def new
-    @chat = Chat.new
-  end
-
-  # GET /chats/1/edit
-  def edit
-  end
-
   # POST /chats or /chats.json
   def create
     @chat = Chat.new(chat_params)
