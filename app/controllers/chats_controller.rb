@@ -13,6 +13,7 @@ class ChatsController < ApplicationController
 
   def create
     @chat = @application.chats.build(chat_params)
+    @chat.messages_count = 0
 
     if @chat.save
       render json: @chat

@@ -1,5 +1,5 @@
 class Chat < ApplicationRecord
-  belongs_to :application
+  belongs_to :application, touch: true, counter_cache: :chats_count
 
   has_many :messages, dependent: :destroy
 
