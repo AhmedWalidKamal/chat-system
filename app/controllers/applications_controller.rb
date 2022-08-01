@@ -1,13 +1,16 @@
 class ApplicationsController < ApplicationController
+
+  include Filter
+
   before_action :set_application, only: %i[ show update destroy ]
 
   def index
     @applications = Application.all
-    render json: @applications
+    render filter @applications
   end
 
   def show
-    render json: @application
+    render filter @application
   end
 
   def create
@@ -15,7 +18,7 @@ class ApplicationsController < ApplicationController
     @application.chats_count = 0
 
     if @application.save
-      render json: @application
+      render filter @application
     else
       render json: @application.errors, status: :bad_request
     end
@@ -23,7 +26,7 @@ class ApplicationsController < ApplicationController
 
   def update
     if @application.update(application_params)
-      render json: @application
+      render filter @application
     else
       render json: @application.errors, status: :bad_request
     end

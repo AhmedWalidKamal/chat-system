@@ -1,22 +1,25 @@
 class MessagesController < ApplicationController
+
+  include Filter
+
   before_action :set_application
   before_action :set_chat
   before_action :set_message, only: [:show, :update, :destroy]
 
   def index
     @messages = @chat.messages.all
-    render json: @messages
+    render filter @messages
   end
 
   def show
-    render json: @message
+    render filter @message
   end
 
   def create
     @message = @chat.messages.build(message_params)
 
     if @message.save
-      render json: @message
+      render filter @message
     else
       render json: @message.errors, status: :bad_request
     end
@@ -24,7 +27,7 @@ class MessagesController < ApplicationController
 
   def update
     if @message.update(message_params)
-      render json: @message
+      render filter @message
     else
       render json: @message.errors, status: :bad_request
     end

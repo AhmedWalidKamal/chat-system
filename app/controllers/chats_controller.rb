@@ -1,14 +1,17 @@
 class ChatsController < ApplicationController
+
+  include Filter
+
   before_action :set_application
   before_action :set_chat, only: [:show, :update, :destroy]
 
   def index
     @chats = @application.chats.all
-    render json: @chats
+    render filter @chats
   end
 
   def show
-    render json: @chat
+    render filter @chat
   end
 
   def create
@@ -16,7 +19,7 @@ class ChatsController < ApplicationController
     @chat.messages_count = 0
 
     if @chat.save
-      render json: @chat
+      render filter @chat
     else
       render json: @chat.errors, status: :bad_request
     end
@@ -24,7 +27,7 @@ class ChatsController < ApplicationController
 
   def update
     if @chat.update(chat_params)
-      render json: @chat
+      render filter @chat
     else
       render json: @chat.errors, status: :bad_request
     end
