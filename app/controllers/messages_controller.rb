@@ -37,6 +37,11 @@ class MessagesController < ApplicationController
     @message.destroy
   end
 
+  def search
+    messages = Message.search(params[:query], @chat.id)
+    render filter messages
+  end
+
   private
 
     def set_application

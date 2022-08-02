@@ -1,4 +1,6 @@
 class Message < ApplicationRecord
+  include Searchable
+
   belongs_to :chat, touch: true, counter_cache: :messages_count
 
   validates :number, presence: true,

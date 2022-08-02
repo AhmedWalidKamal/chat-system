@@ -42,6 +42,13 @@ gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
+# Use Elasticsearch for searching through messages
+gem "elasticsearch-model"
+gem "elasticsearch-rails"
+
+# Add sidekiq
+gem 'sidekiq', '~>6.0.0'
+
 # Use Sass to process CSS
 # gem "sassc-rails"
 
