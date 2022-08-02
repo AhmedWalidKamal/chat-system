@@ -1,0 +1,13 @@
+# inside config/sidekiq.yml
+development:
+  :concurrency: 5
+
+production:
+  :concurrency: 10
+
+:max_retries: 5
+
+:queues:
+  - chat_creation
+  - message_creation
+  - default

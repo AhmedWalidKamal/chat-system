@@ -18,7 +18,8 @@ class MessagesController < ApplicationController
   def create
     @message = @chat.messages.build(message_params)
 
-    if @message.save
+    if @message.valid?
+      MessageWorker.perform_async(params[:application_token], params[:chat_number], params[:number], params[:body])
       render filter @message
     else
       render json: @message.errors, status: :bad_request
