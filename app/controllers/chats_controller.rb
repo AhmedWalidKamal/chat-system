@@ -15,14 +15,17 @@ class ChatsController < ApplicationController
   end
 
   def create
-    @chat = @application.chats.build(chat_params)
-    @chat.messages_count = 0
 
-    if @chat.save
-      render filter @chat
-    else
-      render json: @chat.errors, status: :bad_request
-    end
+    ChatWorker.perform_async
+
+    # @chat = @application.chats.build(chat_params)
+    # @chat.messages_count = 0
+
+    # if @chat.save
+    #   render filter @chat
+    # else
+    #   render json: @chat.errors, status: :bad_request
+    # end
   end
 
   def update

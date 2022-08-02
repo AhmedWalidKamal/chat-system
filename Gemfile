@@ -47,7 +47,8 @@ gem "elasticsearch-model"
 gem "elasticsearch-rails"
 
 # Add sidekiq
-gem 'sidekiq', '~>6.0.0'
+gem "sidekiq"
+gem "sidekiq-scheduler"
 
 # Use Sass to process CSS
 # gem "sassc-rails"
