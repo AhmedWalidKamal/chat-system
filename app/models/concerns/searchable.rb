@@ -9,6 +9,7 @@ module Searchable
       unless Message.__elasticsearch__.index_exists?
         Message.__elasticsearch__.create_index!
       end
+      Message.import
 
       def as_indexed_json(_options = {})
         as_json(only: %i[ :chat_id :body ])

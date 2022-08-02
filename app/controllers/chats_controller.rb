@@ -15,11 +15,12 @@ class ChatsController < ApplicationController
   end
 
   def create
-    @chat = @application.chats.build(chat_params)
+    @chat = @application.chats.build
+    @chat.number = next_chat_number
     @chat.messages_count = 0
 
     if @chat.valid?
-      ChatWorker.perform_async(params[:application_token], params[:number])
+      ChatWorker.perform_async(@application.token, @chat.number)
       render filter @chat
     else
       render json: @chat.errors, status: :bad_request
@@ -49,5 +50,17 @@ class ChatsController < ApplicationController
 
     def chat_params
       params.permit(:number)
+    end
+
+    def next_chat_number
+      number = REDIS_CLIENT.get("app_#{@application.token}_next_chat_number")
+
+      if !number
+        REDIS_CLIENT.set("app_#{@application.token}_next_chat_number" , 1)
+        number = 1
+      end
+      REDIS_CLIENT.incr("app_#{@application.token}_next_chat_number")
+
+      return number
     end
 end

@@ -16,10 +16,11 @@ class MessagesController < ApplicationController
   end
 
   def create
-    @message = @chat.messages.build(message_params)
+    message_number = next_message_number
+    @message = @chat.messages.build(body: params[:body], number: message_number)
 
     if @message.valid?
-      MessageWorker.perform_async(params[:application_token], params[:chat_number], params[:number], params[:body])
+      MessageWorker.perform_async(@application.token, @chat.number, @message.number, @message.body)
       render filter @message
     else
       render json: @message.errors, status: :bad_request
@@ -60,5 +61,17 @@ class MessagesController < ApplicationController
     # Only allow a list of trusted parameters through.
     def message_params
       params.permit(:body, :number)
+    end
+
+    def next_message_number
+      number = REDIS_CLIENT.get("app_#{@application.token}_chat_#{@chat.number}_next_message_number")
+
+      if !number
+        REDIS_CLIENT.set("app_#{@application.token}_chat_#{@chat.number}_next_message_number" , 1)
+        number = 1
+      end
+      REDIS_CLIENT.incr("app_#{@application.token}_chat_#{@chat.number}_next_message_number")
+
+      return number
     end
 end
