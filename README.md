@@ -1,4 +1,4 @@
-# chat-sytem
+# chat-system
 
 An API for a chatting system which allows the creation of applications, each application can have numerous chats, which in turn have messages.
 The API is built using Ruby on Rails.
